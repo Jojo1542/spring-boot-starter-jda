@@ -13,6 +13,7 @@ A Spring Boot starter for [JDA (Java Discord API)](https://github.com/discord-jd
 - **Declarative configuration** via `application.yml`
 - **Automatic listener registration** with `@JdaListener`
 - **Slash command support** with `@SlashCommand` and Triumph CMDs
+- **Component interaction system** for buttons, select menus, and modals
 - **Customizable** via `JdaBuilderCustomizer` and `SlashCommandManagerCustomizer`
 - **Dependency injection** in all components
 
@@ -28,7 +29,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.jojo1542:spring-boot-starter-jda:1.0.0")
+    implementation("com.github.jojo1542:spring-boot-starter-jda:1.1.0")
 }
 ```
 
@@ -42,7 +43,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.jojo1542:spring-boot-starter-jda:1.0.0'
+    implementation 'com.github.jojo1542:spring-boot-starter-jda:1.1.0'
 }
 ```
 
@@ -63,7 +64,7 @@ dependencies {
 <dependency>
     <groupId>com.github.jojo1542</groupId>
     <artifactId>spring-boot-starter-jda</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
@@ -105,20 +106,19 @@ public class ReadyListener extends ListenerAdapter {
 ### 3. Create a slash command
 
 ```java
-import dev.triumphteam.cmd.core.annotation.Command;
-import dev.triumphteam.cmd.core.annotation.Default;
-import dev.triumphteam.cmd.core.BaseCommand;
-import dev.triumphteam.cmd.slash.sender.SlashSender;
+import dev.triumphteam.cmd.core.annotations.Command;
+import dev.triumphteam.cmd.jda.sender.CommandSender;
+import es.jojo1542.spring.jda.command.BaseCommand;
 import es.jojo1542.spring.jda.command.SlashCommand;
 
 @SlashCommand
 @Command("ping")
 public class PingCommand extends BaseCommand {
 
-    @Default
-    public void execute(SlashSender sender) {
+    @Command
+    public void execute(CommandSender sender) {
         long ping = sender.getEvent().getJDA().getGatewayPing();
-        sender.reply("Pong! 🏓 " + ping + "ms").queue();
+        sender.getEvent().reply("Pong! " + ping + "ms").queue();
     }
 }
 ```
@@ -189,21 +189,16 @@ spring:
 @Command("admin")
 public class AdminCommand extends BaseCommand {
 
-    @Default
-    public void help(SlashSender sender) {
-        sender.reply("Admin commands: /admin ban, /admin kick").queue();
-    }
-
-    @SubCommand("ban")
-    public void ban(SlashSender sender, @Argument User user, @Argument String reason) {
+    @Command("ban")
+    public void ban(CommandSender sender, User user, String reason) {
         // Ban logic
-        sender.reply("Banned " + user.getName() + ": " + reason).queue();
+        sender.getEvent().reply("Banned " + user.getName() + ": " + reason).queue();
     }
 
-    @SubCommand("kick")
-    public void kick(SlashSender sender, @Argument User user) {
+    @Command("kick")
+    public void kick(CommandSender sender, User user) {
         // Kick logic
-        sender.reply("Kicked " + user.getName()).queue();
+        sender.getEvent().reply("Kicked " + user.getName()).queue();
     }
 }
 ```
@@ -223,13 +218,102 @@ public class StatsCommand extends BaseCommand {
         this.statsRepository = statsRepository;
     }
 
-    @Default
-    public void execute(SlashSender sender) {
-        var stats = statsRepository.findByUserId(sender.getEvent().getUser().getId());
-        sender.reply("Your stats: " + stats).queue();
+    @Command
+    public void execute(CommandSender sender) {
+        var stats = statsRepository.findByUserId(sender.getUser().getId());
+        sender.getEvent().reply("Your stats: " + stats).queue();
     }
 }
 ```
+
+## Component Interactions
+
+Create interactive Discord components (buttons, select menus, modals) with a fluent API.
+
+### Quick Example
+
+```java
+@SlashCommand
+@Command("demo")
+public class DemoCommand extends BaseCommand {
+
+    private final ComponentBuilder components;
+
+    public DemoCommand(ComponentBuilder components) {
+        this.components = components;
+    }
+
+    @Command("button")
+    public void button(CommandSender sender) {
+        var button = components.button()
+            .success("Click me!")
+            .emoji("👋")
+            .onClick((event, ctx) -> {
+                event.reply("Hello!").setEphemeral(true).queue();
+            })
+            .expireAfter(Duration.ofMinutes(5))
+            .build();
+
+        sender.getEvent()
+            .reply("Here's a button:")
+            .addActionRow(button)
+            .queue();
+    }
+
+    @Command("modal")
+    public void modal(CommandSender sender) {
+        var openBtn = components.button()
+            .primary("Open Form")
+            .onClick((event, ctx) -> {
+                var modal = components.modal()
+                    .title("Feedback")
+                    .shortInput("subject", "Subject", "Brief description")
+                    .paragraphInput("message", "Message", "Your feedback...")
+                    .onSubmit((modalEvent, modalCtx) -> {
+                        String subject = modalEvent.getValue("subject").getAsString();
+                        modalEvent.reply("Received: " + subject).queue();
+                    })
+                    .build();
+                event.replyModal(modal).queue();
+            })
+            .build();
+
+        sender.getEvent()
+            .reply("Click to open form:")
+            .addActionRow(openBtn)
+            .queue();
+    }
+}
+```
+
+### Features
+
+| Feature | Description |
+|---------|-------------|
+| **Buttons** | All styles (primary, secondary, success, danger, link) with emoji support |
+| **Select Menus** | String select with options, multi-select support |
+| **Entity Selects** | User, role, channel, and mentionable selectors |
+| **Modals** | Text input forms with short and paragraph fields |
+| **Auto-expiration** | Callbacks automatically expire (default: 15 minutes) |
+| **Auto-disable** | Buttons automatically disable when callbacks expire |
+| **Stateless Handlers** | Annotation-based handlers that survive bot restarts |
+
+### Configuration
+
+```yaml
+spring:
+  jda:
+    components:
+      enabled: true
+      callback:
+        default-ttl: 15m
+        max-size: 10000
+        disable-on-expire: true
+```
+
+> **Full Documentation:** See [docs/COMPONENTS.md](docs/COMPONENTS.md) for complete guide with examples.
+
+---
 
 ## Advanced Customization
 
@@ -306,6 +390,9 @@ See the [example](example/) directory for a complete working bot with:
 - Message listener
 - Ping command
 - Info command with subcommands
+- Component examples (buttons, select menus, modals)
+- Pagination example
+- Form/modal examples
 
 ## Requirements
 

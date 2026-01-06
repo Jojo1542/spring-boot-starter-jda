@@ -1,2 +1,3 @@
 es.jojo1542.spring.jda.JdaAutoConfiguration
 es.jojo1542.spring.jda.command.SlashCommandAutoConfiguration
+es.jojo1542.spring.jda.component.config.ComponentAutoConfiguration

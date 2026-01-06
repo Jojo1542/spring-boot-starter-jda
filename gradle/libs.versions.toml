@@ -9,6 +9,7 @@ triumph-cmds = "2.0.0-BETA-4"
 
 # Utils
 spring-dotenv = "4.0.0"
+caffeine = "3.1.8"
 
 # Java
 java = "21"
@@ -26,6 +27,7 @@ triumph-cmds-jda-slash = { module = "dev.triumphteam:triumph-cmd-jda", version.r
 
 # Utils
 spring-dotenv = { module = "me.paulschwarz:spring-dotenv", version.ref = "spring-dotenv" }
+caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "caffeine" }
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }

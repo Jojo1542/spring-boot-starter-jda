@@ -39,6 +39,9 @@ dependencies {
     // Triumph CMDs - Transitiva para slash commands
     api(libs.triumph.cmds.jda.slash)
 
+    // Caffeine - Cache con TTL para callbacks de componentes
+    api(libs.caffeine)
+
     // Testing
     testImplementation(libs.spring.boot.starter.test)
 }

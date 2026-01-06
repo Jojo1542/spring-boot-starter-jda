@@ -44,6 +44,54 @@
       "type": "java.lang.Boolean",
       "description": "Whether to enable slash command auto-configuration (requires triumph-cmds on classpath).",
       "defaultValue": true
+    },
+    {
+      "name": "spring.jda.components.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether to enable the component interaction system (buttons, select menus, modals).",
+      "defaultValue": true
+    },
+    {
+      "name": "spring.jda.components.callback.default-ttl",
+      "type": "java.time.Duration",
+      "description": "Default time-to-live for callback-based components.",
+      "defaultValue": "15m"
+    },
+    {
+      "name": "spring.jda.components.callback.max-size",
+      "type": "java.lang.Integer",
+      "description": "Maximum number of callbacks to store in the registry.",
+      "defaultValue": 10000
+    },
+    {
+      "name": "spring.jda.components.callback.log-expirations",
+      "type": "java.lang.Boolean",
+      "description": "Whether to log when callbacks expire.",
+      "defaultValue": false
+    },
+    {
+      "name": "spring.jda.components.callback.disable-on-expire",
+      "type": "java.lang.Boolean",
+      "description": "Whether to disable components when their callback expires.",
+      "defaultValue": true
+    },
+    {
+      "name": "spring.jda.components.callback.expired-message",
+      "type": "java.lang.String",
+      "description": "Message to show when a user interacts with an expired component. Empty to ignore silently.",
+      "defaultValue": "This interaction has expired."
+    },
+    {
+      "name": "spring.jda.components.handler.unknown-message",
+      "type": "java.lang.String",
+      "description": "Message to show when no handler is found for a component. Empty to ignore silently.",
+      "defaultValue": "Unknown interaction."
+    },
+    {
+      "name": "spring.jda.components.handler.auto-acknowledge",
+      "type": "java.lang.Boolean",
+      "description": "Whether to auto-acknowledge interactions if the handler doesn't.",
+      "defaultValue": false
     }
   ],
   "hints": [

@@ -1,0 +1,12 @@
+jdk:
+  - openjdk21
+
+before_install:
+  - ./gradlew wrapper --gradle-version 8.14
+
+install:
+  - ./gradlew clean publishToMavenLocal -x test
+
+# Only publish the root project (starter), not the example
+publish:
+  - spring-boot-starter-jda

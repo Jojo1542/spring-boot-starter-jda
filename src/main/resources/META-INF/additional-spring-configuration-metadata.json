@@ -1,0 +1,93 @@
+{
+  "properties": [
+    {
+      "name": "spring.jda.token",
+      "type": "java.lang.String",
+      "description": "Discord bot token for authentication. Required."
+    },
+    {
+      "name": "spring.jda.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether to enable JDA auto-configuration.",
+      "defaultValue": true
+    },
+    {
+      "name": "spring.jda.await-ready",
+      "type": "java.lang.Boolean",
+      "description": "Whether to block startup until JDA is fully connected.",
+      "defaultValue": true
+    },
+    {
+      "name": "spring.jda.status",
+      "type": "net.dv8tion.jda.api.OnlineStatus",
+      "description": "Online status of the bot.",
+      "defaultValue": "ONLINE"
+    },
+    {
+      "name": "spring.jda.activity.type",
+      "type": "es.jojo1542.spring.jda.JdaProperties$ActivityType",
+      "description": "Type of activity to display.",
+      "defaultValue": "PLAYING"
+    },
+    {
+      "name": "spring.jda.activity.text",
+      "type": "java.lang.String",
+      "description": "Text to display as the activity description."
+    },
+    {
+      "name": "spring.jda.activity.url",
+      "type": "java.lang.String",
+      "description": "URL for streaming activity (only for STREAMING type)."
+    },
+    {
+      "name": "spring.jda.commands.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether to enable slash command auto-configuration (requires triumph-cmds on classpath).",
+      "defaultValue": true
+    }
+  ],
+  "hints": [
+    {
+      "name": "spring.jda.status",
+      "values": [
+        { "value": "ONLINE", "description": "Shows as online (green dot)" },
+        { "value": "IDLE", "description": "Shows as idle/away (yellow dot)" },
+        { "value": "DO_NOT_DISTURB", "description": "Shows as do not disturb (red dot)" },
+        { "value": "INVISIBLE", "description": "Appears offline but still connected" }
+      ]
+    },
+    {
+      "name": "spring.jda.activity.type",
+      "values": [
+        { "value": "PLAYING", "description": "Playing [text]" },
+        { "value": "STREAMING", "description": "Streaming [text] (requires URL)" },
+        { "value": "LISTENING", "description": "Listening to [text]" },
+        { "value": "WATCHING", "description": "Watching [text]" },
+        { "value": "COMPETING", "description": "Competing in [text]" },
+        { "value": "CUSTOM", "description": "Custom status message" }
+      ]
+    },
+    {
+      "name": "spring.jda.intents",
+      "values": [
+        { "value": "GUILD_MEMBERS" },
+        { "value": "GUILD_MODERATION" },
+        { "value": "GUILD_EMOJIS_AND_STICKERS" },
+        { "value": "GUILD_WEBHOOKS" },
+        { "value": "GUILD_INVITES" },
+        { "value": "GUILD_VOICE_STATES" },
+        { "value": "GUILD_PRESENCES" },
+        { "value": "GUILD_MESSAGES" },
+        { "value": "GUILD_MESSAGE_REACTIONS" },
+        { "value": "GUILD_MESSAGE_TYPING" },
+        { "value": "DIRECT_MESSAGES" },
+        { "value": "DIRECT_MESSAGE_REACTIONS" },
+        { "value": "DIRECT_MESSAGE_TYPING" },
+        { "value": "MESSAGE_CONTENT" },
+        { "value": "SCHEDULED_EVENTS" },
+        { "value": "AUTO_MODERATION_CONFIGURATION" },
+        { "value": "AUTO_MODERATION_EXECUTION" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: example-bot
+
+  jda:
+    # Token loaded from .env file via spring-dotenv
+    token: ${DISCORD_TOKEN}
+
+    # Bot status
+    status: ONLINE
+
+    # Activity configuration
+    activity:
+      type: PLAYING
+      text: "with Spring Boot 4"
+
+    # Gateway intents
+    intents:
+      - GUILD_MESSAGES
+      - GUILD_MEMBERS
+      - MESSAGE_CONTENT
+      - DIRECT_MESSAGES
+
+    # Wait for JDA to be ready before completing startup
+    await-ready: true
+
+    # Enable slash commands (default: true)
+    commands:
+      enabled: true
+
+logging:
+  level:
+    es.jojo1542: DEBUG
+    net.dv8tion.jda: INFO

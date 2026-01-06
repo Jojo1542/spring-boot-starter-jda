@@ -1,0 +1,32 @@
+[versions]
+# Spring
+spring-boot = "4.0.1"
+spring-dependency-management = "1.1.7"
+
+# Discord
+jda = "5.2.2"
+triumph-cmds = "2.0.0-BETA-4"
+
+# Utils
+spring-dotenv = "4.0.0"
+
+# Java
+java = "21"
+
+[libraries]
+# Spring Boot
+spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter" }
+spring-boot-autoconfigure-processor = { module = "org.springframework.boot:spring-boot-autoconfigure-processor" }
+spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+
+# Discord
+jda = { module = "net.dv8tion:JDA", version.ref = "jda" }
+triumph-cmds-jda-slash = { module = "dev.triumphteam:triumph-cmd-jda", version.ref = "triumph-cmds" }
+
+# Utils
+spring-dotenv = { module = "me.paulschwarz:spring-dotenv", version.ref = "spring-dotenv" }
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
